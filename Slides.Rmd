@@ -1,0 +1,75 @@
+---
+title: "Car Loan Payment Calculator - Shiny App"
+author: "IrisDingLing"
+date: "29/01/2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Car Loan Calculator
+**Need a app on your phone handy when comparing car loan or simply want to find out how much**
+**you should be paying each month for your new ride**
+
+*No Problem, we got it covered*
+
+**Here is what we can do for you**
+
+## The monthly car loan payment app - beta
+
+Simply put in the customized interest rate, choose a loan term between 1-7 years, and the total loan amount between AUD10,000 - AUD100,000. 
+***Range based on one of the big four bank's offer in AU***
+
+E.g.: Borrow $30,000 today, 6 year term @ 3% p.a. interest, estimated monthly repayment will be AUD455. Maybe a compact SUV?
+
+```{r, echo = TRUE}
+library(shiny)
+library(miniUI)
+carloan <- function(P, I, Y){
+    ui <- miniPage(
+        gadgetTitleBar("Car Loan"),
+        miniContentPanel(
+            numericInput("I", "Interest Rate %p.a.", 
+                         value = 20, min = 1, max = 20, step = 0.1),
+            sliderInput("Y", "Over how many years?", 
+                        1, 7, value = 7, step = 1),
+            sliderInput("P", "How much would you like to borrow", 
+                        10000, 100000, value = 20000, step =1000),
+            
+        )
+    )
+    server <- function(input, output, session){
+        observeEvent(input$done, {
+            P <- as.numeric(input$P)
+            I <- as.numeric(input$I)
+            Y <- as.numeric(input$Y)
+            stopApp((P*(I/1200)/(1-(1+I/1200)^(-Y*12))))
+        })
+    }
+    runGadget(ui, server)
+
+}
+
+carloan(10000:100000, 1:7, 1:20)
+
+```
+
+## Improved version via the link below
+
+
+https://irisdinglingacct.shinyapps.io/myApp/
+
+![CarLoanPMTCalculator](~/myApp/CLC.png)
+
+
+
+
+## Thank you for your kind attention.
+**     Q&A     **
+
+
+
+
+
